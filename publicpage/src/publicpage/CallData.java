@@ -1,10 +1,10 @@
 package publicpage;
 
 public class CallData {
-	public static String getAirlineImage2(String airline) {
+	public static String getAirlineImage(String airline) {
 		return "/publicpage/DownloadFile?filename=logo/"+airline+"_SS.jpg";
 	}
-	public static String getAirlineImage(String airline) {
+	public static String getAirlineImage2(String airline) {
 //		String airlineImage="";
 //		String airline=null;
 	    if(airline.equals("3K"))
