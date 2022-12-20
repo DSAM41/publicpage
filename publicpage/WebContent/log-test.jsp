@@ -58,7 +58,7 @@
 			</div>
 			
 			<div id="errorMessage" style="display: none;">
-				<label style="color: red";><b>Invalid password</b></label>
+				<label style="color: red;"><b>Invalid password</b></label>
 			</div>
 
 		</div>

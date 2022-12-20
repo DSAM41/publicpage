@@ -25,39 +25,6 @@ List<User_test> list=UserService.getUsers();
 
 
 <script>
-	$(document).ready(function ()
-        {	
-        	$.ajax({
-               type: "GET",
-               url:"Get_data_test",
-               headers:{
-                   Accept : "application/json; charset=utf=8",
-                   "Content-Type" : "application/json; charset=utf=8",
-                   },
-               success: function (data) {
-            	   var obj = jQuery.parseJSON(data);
-					if(obj != '')
-					{
-						  $("#myBody").empty();
-						  $.each(obj, function(key, val) {
-									var tr = "<tr>";
-									tr = tr + "<td>" + val["id"] + "</td>";
-									tr = tr + "<td>" + val["firstName"] + "</td>";
-									tr = tr + "<td>" + val["lastName"] + "</td>";
-									tr = tr + "<td>" + val["email"] + "</td>";
-									tr = tr + '<td><button type="button" class="btn btn-success editbtn">EDIT</button></td>';
-									tr = tr + '<td><button type="button" class="btn btn-danger deletebtn">DELETE</button></td>';
-									tr = tr + "</tr>";
-									$('#customers > tbody:last').append(tr);
-						  });
-					}
-               }
-             }); 
-        	setTimeout(btnEdit, 1000); 
-        	setTimeout(btnDelete, 1000);
-        })
-        
-        
     $(document).ready(function(){
        $('#update').click(function()
        {   
@@ -65,98 +32,40 @@ List<User_test> list=UserService.getUsers();
     	   var fname=$('#fname').val();
            var lname=$('#lname').val();
            var mail=$('#mail').val();
+           console.log(update_id); 
            $.ajax({
                type: "GET",
                url:"Edit_test",
                data:{"update_id":update_id,"fname":fname,"lname":lname,"mail":mail},
-               headers:{
-                   Accept : "application/json; charset=utf=8",
-                   "Content-Type" : "application/json; charset=utf=8",
-                   },
                success: function (data) {
-            	   var obj = jQuery.parseJSON(data);
-					if(obj != '')
-					{
-						  $("#myBody").empty();
-						  $.each(obj, function(key, val) {
-									var tr = "<tr>";
-									tr = tr + "<td>" + val["id"] + "</td>";
-									tr = tr + "<td>" + val["firstName"] + "</td>";
-									tr = tr + "<td>" + val["lastName"] + "</td>";
-									tr = tr + "<td>" + val["email"] + "</td>";
-									tr = tr + '<td><button type="button" class="btn btn-success editbtn">EDIT</button></td>';
-									tr = tr + '<td><button type="button" class="btn btn-danger deletebtn">DELETE</button></td>';
-									tr = tr + "</tr>";
-									$('#customers > tbody:last').append(tr);
-						  });
-					}
-              }
-             });      
-           $('#editmodal').modal('hide');
-           setTimeout(btnEdit, 1000);       
-           setTimeout(btnDelete, 1000);                  
+            	   console.log(data);
+            	   //alert(data);
+               }
+             });                              
            });
-       
          });
-    
+   </script>
+<script>
+        $(document).ready(function () {
 
-        function btnEdit() {
             $('.editbtn').on('click', function () {
+
                 $('#editmodal').modal('show');
-                $tr = $(this).closest('tr');;
+
+                $tr = $(this).closest('tr');
+                console.log($tr.children("td"));
+
                 var data = $tr.children("td").map(function () {
                     return $(this).text();
                 }).get();
-            
+
+                
                 $('#update_id').val(data[0]);
                 $('#fname').val(data[1]);
                 $('#lname').val(data[2]);
                 $('#mail').val(data[3]);
             });
-        }
-
-        function btnDelete() {
-            $('.deletebtn').on('click', function () {
-            	var c = confirm("Do you want to delete?");
-        		if (c == true) {
-                $tr = $(this).closest('tr');
-                var data = $tr.children("td").map(function () {
-                    return $(this).text();
-                }).get();
-                console.log(data[0]);      
-                $.ajax({
-                    type: "GET",
-                    url:"Delete_test",
-                    data:{"detete_id":data[0]},
-                    headers:{
-                        Accept : "application/json; charset=utf=8",
-                        "Content-Type" : "application/json; charset=utf=8",
-                        },
-                    success: function (data) {
-                 	   var obj = jQuery.parseJSON(data);
-     					if(obj != '')
-     					{
-     						  $("#myBody").empty();
-     						  $.each(obj, function(key, val) {
-     									var tr = "<tr>";
-     									tr = tr + "<td>" + val["id"] + "</td>";
-     									tr = tr + "<td>" + val["firstName"] + "</td>";
-     									tr = tr + "<td>" + val["lastName"] + "</td>";
-     									tr = tr + "<td>" + val["email"] + "</td>";
-     									tr = tr + '<td><button type="button" class="btn btn-success editbtn">EDIT</button></td>';
-     									tr = tr + '<td><button type="button" class="btn btn-danger deletebtn">DELETE</button></td>';
-     									tr = tr + "</tr>";
-     									$('#customers > tbody:last').append(tr);
-     						  });
-     					}
-                   }
-                  });      
-                setTimeout(btnEdit, 1000);    
-                setTimeout(btnDelete, 1000);    
-        		}                 
-                });
-              }      
-         
+        });
     </script>
 
 </head>
@@ -215,11 +124,18 @@ List<User_test> list=UserService.getUsers();
 			<th>last name</th>
 			<th>mail</th>
 			<th>edit</th>
-			<th>delete</th>
 		</tr>
 		</thead>
 		<tbody id="myBody">
-		
+		<%for(int i = 0; i < list.size(); i++){%>
+		<tr>
+			<td><%=list.get(i).getId()%></td>
+			<td><%=list.get(i).getFirstName()%></td>
+			<td><%=list.get(i).getLastName()%></td>
+			<td><%=list.get(i).getEmail()%></td>
+			<td><button type="button" class="btn btn-success editbtn"> EDIT </button></td>
+		</tr>
+		<%}%> 
 		</tbody>
 	</table>
 

@@ -6,6 +6,8 @@ public class User_test {
 	private String lastName;
 	private String email;
 	
+	public User_test() {}
+	
 	public User_test(int id, String firstName, String lastName, String email) {
 		super();
 		this.id = id;
@@ -14,7 +16,7 @@ public class User_test {
 		this.email = email;
 	}
 	
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
