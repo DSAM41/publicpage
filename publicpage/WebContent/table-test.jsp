@@ -3,12 +3,13 @@
 <%@page import="java.util.List"%>
 <%@page import="publicpage.User_test"%>
 <%@page import="publicpage.UserService"%>
+<%@page import="java.util.ArrayList"%>
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>SHOW DATA</title>
 <style><%@include file="/WEB-INF/css/css_table_test.css"%></style>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -25,7 +26,153 @@ List<User_test> list=UserService.getUsers();
 
 
 <script>
+	$(document).ready(function(){
+		$('.editbtn').on('click', function () {
+	        $('#editmodal').modal('show');
+	        $tr = $(this).closest('tr');;
+	        var data = $tr.children("td").map(function () {
+	            return $(this).text();
+	        }).get();
+	        $('#update_id').val(data[0]);
+	        $('#fname').val(data[1]);
+	        $('#lname').val(data[2]);
+	        $('#mail').val(data[3]);
+    	});
+	});
+	function btnEdit() {
+        $('.editbtn').on('click', function () {
+            $('#editmodal').modal('show');
+            $tr = $(this).closest('tr');;
+            var data = $tr.children("td").map(function () {
+                return $(this).text();
+            }).get();
+        
+            $('#update_id').val(data[0]);
+            $('#fname').val(data[1]);
+            $('#lname').val(data[2]);
+            $('#mail').val(data[3]);
+        });
+    }
+
+	$(document).ready(function(){
+	       $('#update').click(function()
+	    	       {   
+	    	    	   var update_id=$('#update_id').val();
+	    	    	   var fname=$('#fname').val();
+	    	           var lname=$('#lname').val();
+	    	           var mail=$('#mail').val();
+	    	           $.ajax({
+	    	               type: "GET",
+	    	               url:"Edit_test",
+	    	               data:{"update_id":update_id,"fname":fname,"lname":lname,"mail":mail},
+	    	               headers:{
+	    	                   Accept : "application/json; charset=utf=8",
+	    	                   "Content-Type" : "application/json; charset=utf=8",
+	    	                   },
+	    	               success: function (data) {
+	    	            	   var obj = jQuery.parseJSON(data);
+	    						if(obj != '')
+	    						{
+	    							  $("#myBody").empty();
+	    							  $.each(obj, function(key, val) {
+	    										var tr = "<tr>";
+	    										tr = tr + "<td>" + val["id"] + "</td>";
+	    										tr = tr + "<td>" + val["firstName"] + "</td>";
+	    										tr = tr + "<td>" + val["lastName"] + "</td>";
+	    										tr = tr + "<td>" + val["email"] + "</td>";
+	    										tr = tr + '<td><button type="button" class="btn btn-success editbtn">EDIT</button></td>';
+	    										tr = tr + '<td><button type="button" class="btn btn-danger deletebtn">DELETE</button></td>';
+	    										tr = tr + "</tr>";
+	    										$('#customers > tbody:last').append(tr);
+	    							  });
+	    						}
+	    	              }
+	    	             });      
+	    	           $('#editmodal').modal('hide');
+	    	           setTimeout(btnEdit, 1000);       
+	    	           setTimeout(btnDelete, 1000);                  
+	    	           });
+           }
+    );
+
 	$(document).ready(function ()
+	        {	
+	        	$.ajax({
+	               type: "GET",
+	               url:"Get_data_test",
+	               headers:{
+	                   Accept : "application/json; charset=utf=8",
+	                   "Content-Type" : "application/json; charset=utf=8",
+	                   },
+	               success: function (data) {
+	            	   var obj = jQuery.parseJSON(data);
+						if(obj != '')
+						{
+							  $("#myBody").empty();
+							  $.each(obj, function(key, val) {
+										var tr = "<tr>";
+										tr = tr + "<td>" + val["id"] + "</td>";
+										tr = tr + "<td>" + val["firstName"] + "</td>";
+										tr = tr + "<td>" + val["lastName"] + "</td>";
+										tr = tr + "<td>" + val["email"] + "</td>";
+										tr = tr + '<td><button type="button" class="btn btn-success editbtn">EDIT</button></td>';
+										tr = tr + '<td><button type="button" class="btn btn-danger deletebtn">DELETE</button></td>';
+										tr = tr + "</tr>";
+										$('#customers > tbody:last').append(tr);
+							  });
+						}
+	               }
+	             }); 
+	        	setTimeout(btnEdit, 1000); 
+	        	setTimeout(btnDelete, 1000);
+	        }
+    );
+
+	function btnDelete() {
+        $('.deletebtn').on('click', function () {
+        	var c = confirm("Do you want to delete?");
+    		if (c == true) {
+            $tr = $(this).closest('tr');
+            var data = $tr.children("td").map(function () {
+                return $(this).text();
+            }).get();
+            console.log(data[0]);      
+            $.ajax({
+                type: "GET",
+                url:"Delete_test",
+                data:{"detete_id":data[0]},
+                headers:{
+                    Accept : "application/json; charset=utf=8",
+                    "Content-Type" : "application/json; charset=utf=8",
+                    },
+                success: function (data) {
+             	   var obj = jQuery.parseJSON(data);
+ 					if(obj != '')
+ 					{
+ 						  $("#myBody").empty();
+ 						  $.each(obj, function(key, val) {
+ 									var tr = "<tr>";
+ 									tr = tr + "<td>" + val["id"] + "</td>";
+ 									tr = tr + "<td>" + val["firstName"] + "</td>";
+ 									tr = tr + "<td>" + val["lastName"] + "</td>";
+ 									tr = tr + "<td>" + val["email"] + "</td>";
+ 									tr = tr + '<td><button type="button" class="btn btn-success editbtn">EDIT</button></td>';
+ 									tr = tr + '<td><button type="button" class="btn btn-danger deletebtn">DELETE</button></td>';
+ 									tr = tr + "</tr>";
+ 									$('#customers > tbody:last').append(tr);
+ 						  });
+ 					}
+               }
+              });      
+            setTimeout(btnEdit, 1000);    
+            setTimeout(btnDelete, 1000);    
+    		}                 
+    	});
+    }
+
+    
+	
+	/* $(document).ready(function ()
         {	
         	$.ajax({
                type: "GET",
@@ -55,10 +202,10 @@ List<User_test> list=UserService.getUsers();
              }); 
         	setTimeout(btnEdit, 1000); 
         	setTimeout(btnDelete, 1000);
-        })
+        }) */
         
         
-    $(document).ready(function(){
+    /* $(document).ready(function(){
        $('#update').click(function()
        {   
     	   var update_id=$('#update_id').val();
@@ -97,10 +244,9 @@ List<User_test> list=UserService.getUsers();
            setTimeout(btnDelete, 1000);                  
            });
        
-         });
-    
+         }); */
 
-        function btnEdit() {
+        /* function btnEdit() {
             $('.editbtn').on('click', function () {
                 $('#editmodal').modal('show');
                 $tr = $(this).closest('tr');;
@@ -114,8 +260,9 @@ List<User_test> list=UserService.getUsers();
                 $('#mail').val(data[3]);
             });
         }
+        */
 
-        function btnDelete() {
+       /* function btnDelete() {
             $('.deletebtn').on('click', function () {
             	var c = confirm("Do you want to delete?");
         		if (c == true) {
@@ -155,8 +302,8 @@ List<User_test> list=UserService.getUsers();
                 setTimeout(btnDelete, 1000);    
         		}                 
                 });
-              }      
-         
+              } */      
+        //setTimeout(btnEdit, 1000); 
     </script>
 
 </head>
@@ -222,8 +369,5 @@ List<User_test> list=UserService.getUsers();
 		
 		</tbody>
 	</table>
-
-
-
 </body>
 </html>

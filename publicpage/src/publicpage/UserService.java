@@ -5,11 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UserService {
-	public static List<User_test> delete(User_test user) {
-		List<User_test> list = UserService.getUsers();
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getId() == user.getId()) {		
-				list.remove(i);
+	public static List<User_test> delete(User_test user, List<User_test> users) {
+		List<User_test> list = new ArrayList<User_test>();
+		for(User_test user1 : users){
+			if (user1.getId() == user.getId()) {
+				
+			} else {
+				list.add(user1);
 			}
 		}
 		return list;
@@ -56,14 +58,15 @@ public class UserService {
 		return list;
 	}
 
-	public static List<User_test> update(User_test user) {
-		List<User_test> list = UserService.getUsers();
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getId() == user.getId()) {
-				list.get(i).setFirstName(user.getFirstName());
-				list.get(i).setLastName(user.getLastName());
-				list.get(i).setEmail(user.getEmail());
+	public static List<User_test> update(User_test user, List<User_test> users) {
+		List<User_test> list = new ArrayList<User_test>();
+		for(User_test user1 : users){
+			if (user1.getId() == user.getId()) {
+				user1.setFirstName(user.getFirstName());
+				user1.setLastName(user.getLastName());
+				user1.setEmail(user.getEmail());
 			}
+			list.add(user1);
 		}
 		return list;
 	}

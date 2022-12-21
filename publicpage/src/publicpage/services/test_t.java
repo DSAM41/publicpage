@@ -1,33 +1,29 @@
 package publicpage.services;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import com.google.gson.Gson;
-
-import publicpage.UserService;
-import publicpage.User_test;
+import publicpage.test;
 
 /**
- * Servlet implementation class Delete_test
+ * Servlet implementation class test_t
  */
-@WebServlet("/Delete_test")
-public class Delete_test extends HttpServlet {
+@WebServlet("/test_t")
+public class test_t extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Delete_test() {
+    public test_t() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,18 +33,25 @@ public class Delete_test extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		int detete_id = Integer.parseInt(request.getParameter("detete_id"));
-		User_test e = new User_test();
-		e.setId(detete_id);
-		List<User_test> users = (ArrayList<User_test>)request.getSession().getAttribute("users");
-		List<User_test> list = UserService.delete(e, users);
-		HttpSession session = request.getSession();
-		session.setAttribute("users",list);
-		Gson gson = new Gson();
-		String userJSON = gson.toJson(list);
-		PrintWriter printWriter = response.getWriter();
-		printWriter.write(userJSON);
-		printWriter.close();
+//		RequestDispatcher rd=request.getRequestDispatcher("/table-test.jsp");  
+//		rd.include(request, response);
+		
+		List<test> students = new ArrayList<test>();
+		test student = new test();
+		student.setFirstName("Hussein");
+		student.setEmail("25");
+		        
+		test student2 = new test();
+		student2.setFirstName("Hussein");
+		student2.setEmail("25");
+		        
+		students.add(student);
+		students.add(student2);
+
+		request.setAttribute("students", students);
+		RequestDispatcher rd=request.getRequestDispatcher("/table-test.jsp"); 
+		rd.include(request, response);
+//		request.getRequestDispatcher("/table-test.jsp").include(request, response);
 	}
 
 	/**

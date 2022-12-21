@@ -2,6 +2,7 @@ package publicpage.services;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -37,9 +38,9 @@ public class Get_data_test extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		List<User_test> list = UserService.getUsers();
+		List<User_test> users = (ArrayList<User_test>)request.getSession().getAttribute("users");
 		Gson gson = new Gson();
-		String userJSON = gson.toJson(list);
+		String userJSON = gson.toJson(users);
 		PrintWriter printWriter = response.getWriter();
 		printWriter.write(userJSON);
 		printWriter.close();

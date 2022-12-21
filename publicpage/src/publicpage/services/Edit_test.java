@@ -2,6 +2,7 @@ package publicpage.services;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
@@ -49,9 +51,18 @@ public class Edit_test extends HttpServlet {
 		e.setLastName(lname);
 		e.setEmail(mail);
 
-		List<User_test> list = UserService.update(e);
+		List<User_test> users = (ArrayList<User_test>)request.getSession().getAttribute("users");
+		List<User_test> list = UserService.update(e, users);
+		HttpSession session = request.getSession();
+		session.setAttribute("users",list);
+		
+//		List<User_test> users = (ArrayList<User_test>)request.getSession().getAttribute("users");
+//		for(User_test user : users)
+//		{
+//			System.out.println(user.getFirstName());
+//		}
 		Gson gson = new Gson();
-		String userJSON = gson.toJson(list);
+		String userJSON = gson.toJson(users);
 
 		PrintWriter printWriter = response.getWriter();
 		printWriter.write(userJSON);
